@@ -1,6 +1,7 @@
 service:
   name: auction-service
 
+# plugins
 plugins:
   - serverless-bundle
   - serverless-pseudo-parameters
