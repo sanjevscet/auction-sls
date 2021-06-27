@@ -1,5 +1,5 @@
 import AWS from "aws-sdk";
-import commonMiddleware from "./lib/commonMiddleware";
+import commonMiddleware from "../lib/commonMiddleware";
 import createError from "http-errors";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
@@ -17,14 +17,14 @@ async function getAuction(event, context) {
       })
       .promise();
 
-    auction = result.Items;
+    auction = result.Item;
   } catch (error) {
     console.log(JSON.stringify(error));
     throw new createError.InternalServerError(error);
   }
 
   if (!auction) {
-    throw new createError.NotFound(`Auction with ID {id} not found`);
+    throw new createError.NotFound(`Auction with ID ${id} not found`);
   }
 
   return {
