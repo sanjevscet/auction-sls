@@ -11,13 +11,16 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: us-east-1
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}  
+    AUCTIONS_TABLE_NAME_ARN: ${self:custom.AuctionsTable.arn}  
   iamRoleStatements:
-    - ${file(iam/AuctionsTableIAM.yaml):AuctionsTableIAM}
+    - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
 
 
 resources:
   Resources:
-    AuctionsTable: ${file(resources/AuctionsTable.yaml):AuctionsTable}
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
 
 functions:
   hello:
@@ -38,3 +41,8 @@ functions:
       - http:
           method: POST
           path: /auction
+
+custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn
