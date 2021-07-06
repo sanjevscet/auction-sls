@@ -12,11 +12,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
-    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}  
-    AUCTIONS_TABLE_NAME_ARN: ${self:custom.AuctionsTable.arn}  
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
+    AUCTIONS_TABLE_NAME_ARN: ${self:custom.AuctionsTable.arn}
   iamRoleStatements:
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
-
 
 resources:
   Resources:
@@ -49,7 +48,13 @@ functions:
     events:
       - http:
           method: Patch
-          path: /auction/{id}/bid         
+          path: /auction/{id}/bid
+
+  processAuctions:
+    handler: src/handlers/processAuctions.handler
+    # events:
+    #   - schedule: rate(1 minute)
+
 custom:
   AuctionsTable:
     name: !Ref AuctionsTable
